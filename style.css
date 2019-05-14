@@ -1,0 +1,60 @@
+/* .container {
+    margin: auto;
+    background-color: blue;
+    height: 300px;
+    width: 500px;
+    padding: 5px;
+
+} */
+
+#header {
+    background-color: red;
+    width: 98%;
+    height: 50px;
+    margin-left: 1%;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: row;
+
+    margin: 5px;
+}
+
+#monthAndYear {
+    background-color: blueviolet;
+    flex: 7 1 auto;
+    padding: 5px;
+    margin: 5px;
+    font-size: 20px;
+}
+
+#view {
+    background-color: yellow;
+    flex: 2 1 auto;
+    padding: 5px;
+    margin: 5px;
+    font-size: 20px;
+    text-align: right;
+}
+
+/* 
+#calendar {
+    border: 1px solid black;
+
+}
+
+#table-head {} */
+
+
+/* .th {
+    flex: 1 1 auto;
+    background-color: aliceblue;
+    border: 1px solid black;
+}
+
+.cosik {
+    background-color: red;
+}
+
+.bg-info {
+    background-color: blueviolet;
+} */
