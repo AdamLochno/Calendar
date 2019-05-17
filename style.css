@@ -15,7 +15,14 @@ body {
     width: 50%;
 }
 
+td.selected {
+    background-color: red;
 
+}
+
+.note {
+    background-color: blue;
+}
 
 #main-header {
 
@@ -39,4 +46,8 @@ td {
     cursor: pointer;
     cursor: hand;
     border: 1px solid #CCCCCC;
+}
+
+#listaZadan {
+    font-size: 12px;
 }

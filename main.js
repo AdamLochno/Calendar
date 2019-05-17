@@ -89,10 +89,10 @@ function monthCalendar(month, year) {
                 note.setAttribute("class", "note");
                 //wrzucenie danych(cellText) do rodzica (cell)
                 cell.appendChild(cellText);
-                //wrzucenie danych(note) do rodzica (cell)
+                //wrzucenie obiektu(note) do rodzica (cell)
                 cell.appendChild(note);
                 //komórka note zawierać będzie teraz w sobie div + ul
-                note.innerHTML = "<div id='taskField'></div>" + "<ul></ul>";
+                note.innerHTML = "<div id='taskField'></div>" + "<ul id='listaZadan'></ul>";
                 //zdarzenie gdy następuje dwuklik
                 cell.addEventListener("dblclick", test);
                 //wrzucenie komórki(cell) do rodzica(row)
@@ -132,20 +132,61 @@ function changeView() {
 monthCalendar(currentMonth, currentYear);
 
 
-//dodawanie zadań
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//OBSŁUGA ZADAŃ
 
 const toDoList = [];
 const form = document.getElementById('inputTask');
 const listOfTask = document.getElementById('listOfTask');
 const input = document.querySelector('input');
-// const taskObjectConstructor = function (title, day, month, year) {
-//     this.title = titleTask;
-//     this.day = day;
-//     this.month = month;
-//     this.year = year;
-// }
-
-
+const listaZadan = document.getElementById('listaZadan')
 
 
 //metoda dodająca zadanie
@@ -156,7 +197,7 @@ function addTask(e) {
     const taskOfMonth = document.getElementById('taskMonth');
     const taskOfYear = document.getElementById('taskYear');
 
-    //przypisanie pobranych wartości daty do zmiennych
+    //przypisanie pobranych wartości daty zadania do zmiennych
     let dayOfDoingTask = taskOfDay.value;
     let monthOfDoingTask = taskOfMonth.value;
     let yearOfDoingTask = taskOfYear.value;
@@ -174,26 +215,112 @@ function addTask(e) {
 
     // //stworzenie zadania i dodanie do listy
     const task = document.createElement('li');
+    const task01 = document.createElement('li');
     task.className = 'task';
+    task01.className = 'task';
 
     task.innerHTML = titleTask + "<button id='deleteButton'>Usuń</button>";
+    task01.innerHTML = titleTask;
     //dodanie taska do tablicy
-    toDoList.push(task);
+    toDoList.push(titleTask);
 
 
     listOfTask.appendChild(task);
+
+    //dodanie zadania do kalendarza
+    listaZadan.appendChild(task01);
+
+
+    //czyszczenie pola do wpisywania zadań
     input.value = "";
+
+
+
+
+
+
+
+    //Wysłanie zadania do Local Storage
+
+    // Zabawa z Local Storage
+    // localStorage.setItem('date', currentDay);
+    // console.log(localStorage.getItem('date'));
+
+    //localStorage
+    // let day = new Date();
+    let example = {
+        zadania: toDoList,
+        date: dayOfDoingTask,
+    };
+    localStorage.setItem('object', JSON.stringify(example));
+    console.log(JSON.parse(localStorage.getItem('object')));
 }
 
 form.addEventListener('submit', addTask);
 
 
-//test jQuery
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//metoda uruchamiana po kliknięciu na komórkę z datą
 window.onload = function () {
     document.getElementById('calendar-body').onclick = function (e) {
+
         var e = e || window.event;
         var target = e.target || e.srcElement;
         if (target.tagName.toLowerCase() == "td") {
+            target.classList.toggle('mystyle');
             let txt = target.innerHTML;
             var numb = txt.match(/\d/g);
             numb = numb.join("");
@@ -213,6 +340,24 @@ window.onload = function () {
     };
 
 };
+
+//metoda zmieniająca klasę po kliknięciu
+var table = document.querySelector('#calendar-body')
+var selectedCells = table.getElementsByClassName('selected')
+
+table.addEventListener('click', function (e) {
+    var td = e.target
+
+    if (td.tagName !== 'TD') {
+        return
+    }
+
+    if (selectedCells.length) {
+        selectedCells[0].className = ''
+    }
+
+    td.className = 'selected'
+})
 
 
 
