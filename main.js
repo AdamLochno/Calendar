@@ -181,93 +181,80 @@ monthCalendar(currentMonth, currentYear);
 
 
 //OBSŁUGA ZADAŃ
-
-
+const toDoList = [];
 const form = document.getElementById('inputTask');
-const listOfTask = document.getElementById('listOfTask');
+const ul = document.getElementById('listOfTask');
+const taskNumber = document.querySelector('h1 span');
+const listItems = document.getElementsByClassName('task');
 const input = document.querySelector('input');
-const listaZadan = document.getElementById('listaZadan')
-var toDoList = [];
+
+//renderowanie Listy
 
 
-//metoda usuwająca zadania
+//usuwanie zadania
 const removeTask = (e) => {
+    //bo chcemy usunąć element listy, który jest rodzicem przycisku
+    e.target.parentNode.remove();
     const index = e.target.parentNode.dataset.key;
-    console.log(index);
-    toDoList.splice(index, 1);
+    // console.log(index);
+    //usuwanie jednego elmenetu z tablicy
+    toDoList.splice(index, 1)
+    taskNumber.textContent = listItems.length;
     renderList();
 }
 
-//metoda dodająca zadanie
-function addTask(e) {
+//edytowanie zadania
+const editTask = (e) => {
+    console.log(`działam`);
+    const taskName = e.target.parentNode.textContent;
+    const newStr = taskName.slice(0, taskName.length - 10);
+    //console.log(taskName);
+    console.log(newStr);
+    input.value = newStr;
+    removeTask(e);
+}
+
+//Dodawanie zadań
+const addTask = (e) => {
     e.preventDefault();
-    //pobranie wybranej daty
-    const taskOfDay = document.getElementById('taskDay');
-    const taskOfMonth = document.getElementById('taskMonth');
-    const taskOfYear = document.getElementById('taskYear');
-
-    //przypisanie pobranych wartości daty zadania do zmiennych
-    let dayOfDoingTask = taskOfDay.value;
-    let monthOfDoingTask = taskOfMonth.value;
-    let yearOfDoingTask = taskOfYear.value;
-
-
-    //console.log(input.value);
     const titleTask = input.value;
-    //zabezpieczenie przed dodawaniem pustych zadań
-    if (titleTask === "") {
+    //console.log(titleTask);
+
+    //jak będzie pusty formularz to zakonczy działąnie funkcji
+    if (titleTask == "") {
         return;
     }
-
-    // //stworzenie zadania i dodanie do listy
+    //stworzenie elementu task i nadanie mu klasy task
     const task = document.createElement('li');
-    const task01 = document.createElement('li');
     task.className = 'task';
-    task01.className = 'task';
-
-    task.innerHTML = titleTask + "<button id='deleteButton'>Usuń</button>";
-    task01.innerHTML = titleTask;
+    //task ma teraz wartość zadania do zrobienia oraz przycisków
+    task.innerHTML = titleTask + "<button class='deleteButton'>Delete</button>" + "<button class='editButton'>Edit</button>";
     //dodanie taska do tablicy
+    toDoList.push(task);
+    //lista za każdym razem czyszczona i od nowa generowana
+    renderList();
 
-    toDoList.push(titleTask);
-
-    listOfTask.appendChild(task);
-
-    //dodanie zadania do kalendarza
-    listaZadan.appendChild(task01);
-
-
-    //czyszczenie pola do wpisywania zadań
-
+    //dodanie taska do listy na stronie
+    ul.appendChild(task);
     input.value = "";
+    // const liItems = document.querySelectorAll('li.task').length;
+    taskNumber.textContent = listItems.length;
 
-
-    //Wysłanie zadania do Local Storage
-
-    // Zabawa z Local Storage
-    // localStorage.setItem('date', currentDay);
-    // console.log(localStorage.getItem('date'));
-
-    //localStorage
-    // let day = new Date();
-    let example = {
-        zadania: toDoList,
-
-        date: dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask,
-    };
-    localStorage.setItem('date', JSON.stringify(example));
-    console.log(JSON.parse(localStorage.getItem('date')));
-    task.querySelector('button').addEventListener('click', removeTask);
+    //szukamy w naszym konkretnym tasku przycisku
+    task.querySelector('.deleteButton').addEventListener('click', removeTask);
+    //szukamy w naszym konkretnym tasku przycisku
+    task.querySelector('.editButton').addEventListener('click', editTask);
 }
-// Metoda do odświeżania widoku tablicy po usunięciu
-// const renderList = () => {
-//     listOfTask.textContent = "";
-//     toDoList.forEach((toDoElement, key) => {
-//         toDoElement.dataset.key = key;
-//         listOfTask.appendChild(toDoElement);
-//     })
-// }
-form.addEventListener('submit', addTask);
+const renderList = () => {
+    ul.textContent = "";
+    toDoList.forEach((toDoElement, key) => {
+        //wartość key będzie taka sama jak dataset.key(id)id elementu tablicy
+        toDoElement.dataset.key = key;
+        //dodajemy wszystkie elementy z tablicy do ul-unordered list
+        ul.appendChild(toDoElement);
+    })
+}
+form.addEventListener('submit', addTask)
 
 
 
@@ -281,7 +268,14 @@ form.addEventListener('submit', addTask);
 
 
 
+// let example = {
+//     zadania: toDoList,
 
+//     date: dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask,
+// };
+// localStorage.setItem('date', JSON.stringify(example));
+// console.log(JSON.parse(localStorage.getItem('date')));
+// task.querySelector('button').addEventListener('click', removeTask);
 
 
 
