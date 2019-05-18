@@ -187,6 +187,7 @@ const ul = document.getElementById('listOfTask');
 const taskNumber = document.querySelector('h1 span');
 const listItems = document.getElementsByClassName('task');
 const input = document.querySelector('input');
+const ListForLocalStorage = [];
 
 //renderowanie Listy
 
@@ -198,9 +199,13 @@ const removeTask = (e) => {
     const index = e.target.parentNode.dataset.key;
     // console.log(index);
     //usuwanie jednego elmenetu z tablicy
-    toDoList.splice(index, 1)
+    toDoList.splice(index, 1);
+    ListForLocalStorage.splice(index, 1);
     taskNumber.textContent = listItems.length;
     renderList();
+
+
+
 }
 
 //edytowanie zadania
@@ -231,6 +236,8 @@ const addTask = (e) => {
     task.innerHTML = titleTask + "<button class='deleteButton'>Delete</button>" + "<button class='editButton'>Edit</button>";
     //dodanie taska do tablicy
     toDoList.push(task);
+    ListForLocalStorage.push(titleTask);
+    console.log(ListForLocalStorage);
     //lista za każdym razem czyszczona i od nowa generowana
     renderList();
 
@@ -244,7 +251,15 @@ const addTask = (e) => {
     task.querySelector('.deleteButton').addEventListener('click', removeTask);
     //szukamy w naszym konkretnym tasku przycisku
     task.querySelector('.editButton').addEventListener('click', editTask);
+
+
+
+
+
+
+
 }
+let i = 0;
 const renderList = () => {
     ul.textContent = "";
     toDoList.forEach((toDoElement, key) => {
@@ -253,18 +268,22 @@ const renderList = () => {
         //dodajemy wszystkie elementy z tablicy do ul-unordered list
         ul.appendChild(toDoElement);
     })
+
+
+    //wysłanie do Local Storage
+    //stworzenie obiektu do wysyłki do Local Storage
+    let example = {
+        zadania: ListForLocalStorage, //zadania to tablica z zadaniami do zrobienia
+        date: taskDay.value + "." + taskMonth.value + "." + taskYear.value,
+    }
+    // console.log(example.zadania.length);
+    //wysłanie do Local Storage
+
+    localStorage.setItem('date[i]', JSON.stringify(example));
+    console.log(example);
+    i++;
 }
 form.addEventListener('submit', addTask)
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -309,10 +328,25 @@ form.addEventListener('submit', addTask)
 
 
 
+//ustawienie kalendarza na dane przy pierwszym włączeniu
+const firstLoad = () => {
+    // console.log(`Pierwsze załadowanie`);
+    const taskDay = document.getElementById('taskDay');
+    taskDay.value = today.getDate();
+
+    const taskMonth = document.getElementById('taskMonth');
+    taskMonth.value = today.getMonth();
+
+    document.getElementById('taskYear');
+    taskYear.value = today.getFullYear();
+
+    document.getElementById('chooseMonth').value = today.getMonth();
+    document.getElementById('chooseYear').value = today.getFullYear();
 
 
 
-
+}
+firstLoad();
 
 
 
@@ -338,9 +372,7 @@ window.onload = function () {
 
             const taskOfYear = document.getElementById('taskYear');
             taskOfYear.value = currentYear;
-            console.log(numb);
-            console.log(currentMonth);
-            console.log(currentYear);
+            console.log(taskDay.value + "." + taskMonth.value + "." + taskYear.value);
         }
     };
 
@@ -381,16 +413,22 @@ table.addEventListener('click', function (e) {
 
 
 
-
-
 //Zabawa z Local Storage
 // localStorage.setItem('date', '23.05.1994');
 // console.log(localStorage.getItem('date'));
 
-// let today = new Date();
-// let example = {
+// let day = new Date();
+// let obiektProbny = {
 //     title: 'nowy',
-//     date: today.getDate()
+//     date: today.getDate(),
+//     zadania: [1, 2, 3, 4, 5],
 // };
-// localStorage.setItem('object', JSON.stringify(example));
-// console.log(JSON.parse(localStorage.getItem('object')));
+// localStorage.setItem('Proba', JSON.stringify(obiektProbny));
+// console.log(JSON.parse(localStorage.getItem('Proba')));
+// console.log(obiektProbny.zadania[0]);
+// console.log(obiektProbny.zadania.length);
+// let k = 0;
+// for (k = 0; k < obiektProbny.zadania.length; k++) {
+
+//     console.log(obiektProbny.zadania[k]);
+// }
