@@ -182,12 +182,21 @@ monthCalendar(currentMonth, currentYear);
 
 //OBSŁUGA ZADAŃ
 
-const toDoList = [];
+
 const form = document.getElementById('inputTask');
 const listOfTask = document.getElementById('listOfTask');
 const input = document.querySelector('input');
 const listaZadan = document.getElementById('listaZadan')
+var toDoList = [];
 
+
+//metoda usuwająca zadania
+const removeTask = (e) => {
+    const index = e.target.parentNode.dataset.key;
+    console.log(index);
+    toDoList.splice(index, 1);
+    renderList();
+}
 
 //metoda dodająca zadanie
 function addTask(e) {
@@ -210,9 +219,6 @@ function addTask(e) {
         return;
     }
 
-    //stworzenie obiektu taskObject
-    // let taskObject = new taskObjectConstructor
-
     // //stworzenie zadania i dodanie do listy
     const task = document.createElement('li');
     const task01 = document.createElement('li');
@@ -222,8 +228,8 @@ function addTask(e) {
     task.innerHTML = titleTask + "<button id='deleteButton'>Usuń</button>";
     task01.innerHTML = titleTask;
     //dodanie taska do tablicy
-    toDoList.push(titleTask);
 
+    toDoList.push(titleTask);
 
     listOfTask.appendChild(task);
 
@@ -232,12 +238,8 @@ function addTask(e) {
 
 
     //czyszczenie pola do wpisywania zadań
+
     input.value = "";
-
-
-
-
-
 
 
     //Wysłanie zadania do Local Storage
@@ -250,12 +252,21 @@ function addTask(e) {
     // let day = new Date();
     let example = {
         zadania: toDoList,
-        date: dayOfDoingTask,
-    };
-    localStorage.setItem('object', JSON.stringify(example));
-    console.log(JSON.parse(localStorage.getItem('object')));
-}
 
+        date: dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask,
+    };
+    localStorage.setItem('date', JSON.stringify(example));
+    console.log(JSON.parse(localStorage.getItem('date')));
+    task.querySelector('button').addEventListener('click', removeTask);
+}
+// Metoda do odświeżania widoku tablicy po usunięciu
+// const renderList = () => {
+//     listOfTask.textContent = "";
+//     toDoList.forEach((toDoElement, key) => {
+//         toDoElement.dataset.key = key;
+//         listOfTask.appendChild(toDoElement);
+//     })
+// }
 form.addEventListener('submit', addTask);
 
 
