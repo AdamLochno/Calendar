@@ -181,15 +181,26 @@ monthCalendar(currentMonth, currentYear);
 
 
 //OBSŁUGA ZADAŃ
-const toDoList = [];
+var toDoList = [];
 const form = document.getElementById('inputTask');
-const ul = document.getElementById('listOfTask');
+const listOfTask = document.getElementById('listOfTask');
 const taskNumber = document.querySelector('h1 span');
 const listItems = document.getElementsByClassName('task');
 const input = document.querySelector('input');
 const ListForLocalStorage = [];
 
-//renderowanie Listy
+//Pobranie daty
+const getChosenDateIdentifier = () => {
+    const taskOfDay = document.getElementById('taskDay');
+    const taskOfMonth = document.getElementById('taskMonth');
+    const taskOfYear = document.getElementById('taskYear');
+
+    let dayOfDoingTask = taskOfDay.value;
+    let monthOfDoingTask = taskOfMonth.value;
+    let yearOfDoingTask = taskOfYear.value;
+
+    return JSON.stringify(dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask);
+}
 
 
 //usuwanie zadania
@@ -208,6 +219,8 @@ const removeTask = (e) => {
 
 }
 
+
+
 //edytowanie zadania
 const editTask = (e) => {
     console.log(`działam`);
@@ -222,10 +235,12 @@ const editTask = (e) => {
 //Dodawanie zadań
 const addTask = (e) => {
     e.preventDefault();
+    //pobranie wybranej daty
+    let dateIdentifier = getChosenDateIdentifier();
     const titleTask = input.value;
     //console.log(titleTask);
 
-    //jak będzie pusty formularz to zakonczy działąnie funkcji
+    //jak będzie pusty formularz to zakonczy działanie funkcji
     if (titleTask == "") {
         return;
     }
@@ -234,54 +249,55 @@ const addTask = (e) => {
     task.className = 'task';
     //task ma teraz wartość zadania do zrobienia oraz przycisków
     task.innerHTML = titleTask + "<button class='deleteButton'>Delete</button>" + "<button class='editButton'>Edit</button>";
+
     //dodanie taska do tablicy
+    if (localStorage.getItem(dateIdentifier)) {
+        console.log('działam');
+    }
+
     toDoList.push(task);
-    ListForLocalStorage.push(titleTask);
-    console.log(ListForLocalStorage);
+
+
+
     //lista za każdym razem czyszczona i od nowa generowana
     renderList();
 
     //dodanie taska do listy na stronie
-    ul.appendChild(task);
+    listOfTask.appendChild(task);
     input.value = "";
     // const liItems = document.querySelectorAll('li.task').length;
     taskNumber.textContent = listItems.length;
+
+    task.querySelector('button').addEventListener('click', removeTask);
 
     //szukamy w naszym konkretnym tasku przycisku
     task.querySelector('.deleteButton').addEventListener('click', removeTask);
     //szukamy w naszym konkretnym tasku przycisku
     task.querySelector('.editButton').addEventListener('click', editTask);
 
-
-
-
-
-
-
 }
-let i = 0;
+
+
+
+
+// Renderowanie nowej listy
 const renderList = () => {
-    ul.textContent = "";
+    listOfTask.textContent = "";
     toDoList.forEach((toDoElement, key) => {
         //wartość key będzie taka sama jak dataset.key(id)id elementu tablicy
         toDoElement.dataset.key = key;
-        //dodajemy wszystkie elementy z tablicy do ul-unordered list
-        ul.appendChild(toDoElement);
+        //dodajemy wszystkie elementy z tablicy do listOfTask
+        listOfTask.appendChild(toDoElement);
     })
 
 
     //wysłanie do Local Storage
     //stworzenie obiektu do wysyłki do Local Storage
-    let example = {
-        zadania: ListForLocalStorage, //zadania to tablica z zadaniami do zrobienia
-        date: taskDay.value + "." + taskMonth.value + "." + taskYear.value,
-    }
-    // console.log(example.zadania.length);
-    //wysłanie do Local Storage
+    let dateIdentifier = getChosenDateIdentifier();
+    localStorage.setItem(dateIdentifier, JSON.stringify(toDoList));
+    console.log(JSON.parse(localStorage.getItem(dateIdentifier)));
 
-    localStorage.setItem('date[i]', JSON.stringify(example));
-    console.log(example);
-    i++;
+
 }
 form.addEventListener('submit', addTask)
 
@@ -397,6 +413,13 @@ table.addEventListener('click', function (e) {
 })
 
 
+
+goToToday = () => {
+    // console.log(`dzisiaj`);
+    currentMonth = today.getMonth();
+    currentYear = today.getFullYear();
+    monthCalendar(currentMonth, currentYear);
+}
 
 
 

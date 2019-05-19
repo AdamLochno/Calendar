@@ -15,6 +15,10 @@ body {
     width: 50%;
 }
 
+#chooseDate {
+    font-size: 24px;
+}
+
 td.selected {
     background-color: red;
 
