@@ -20,8 +20,11 @@ body {
 }
 
 td.selected {
-    background-color: red;
+    background-color: silver
+}
 
+td.today {
+    background-color: burlywood
 }
 
 .note {
@@ -52,6 +55,24 @@ td {
     border: 1px solid #CCCCCC;
 }
 
-#listaZadan {
-    font-size: 12px;
+#listOfTask {
+    font-size: 20px;
+
+}
+
+#bottomDiv {
+    display: block;
+    position: relative;
+}
+
+#btnGotToToday {
+    float: left;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+#chooseDate {
+    float: left;
+    margin-left: 0;
+    margin-right: auto;
 }

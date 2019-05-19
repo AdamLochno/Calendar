@@ -167,24 +167,32 @@ monthCalendar(currentMonth, currentYear);
 
 
 
-
-
 //Pobranie zadań z Local Storage
 const loadElementsFromLocalStorage = () => {
+    const listOfTask = document.getElementById('listOfTask');
+    listOfTask.textContent = "To do:"
     //Pobranie elementu z Local Storage
     let dateIdentifier = getChosenDateIdentifier();
     let arrayWithTasks = JSON.parse(localStorage.getItem(dateIdentifier));
-    console.log(arrayWithTasks);
-    var numberOfListItems = arrayWithTasks.length;
-    for (var i = 0; i < numberOfListItems; ++i) {
-        // create an item for each one
-        var listItem = document.createElement('li');
+    //console.log(arrayWithTasks);
+    if (arrayWithTasks == null) {
+        console.log(`brak zadań`);
+    } else {
+        var numberOfListItems = arrayWithTasks.length;
 
-        // Add the item text
-        listItem.innerHTML = arrayWithTasks[i];
+        for (var i = 0; i < numberOfListItems; ++i) {
+            // create an item for each one
+            var listItem = document.createElement('li');
 
-        // Add listItem to the listElement
-        listOfTask.appendChild(listItem);
+            // Add the item text
+            listItem.innerHTML = arrayWithTasks[i];
+
+            // Add listItem to the listElement
+            listOfTask.appendChild(listItem);
+        }
+
+
+
     }
 }
 
@@ -325,7 +333,7 @@ const reloadAfterDataChange = () => {
 
     //Pobranie elementu z Local Storage
     let dateIdentifier = getChosenDateIdentifier();
-    console.log(JSON.parse(localStorage.getItem(dateIdentifier)));
+    //console.log(JSON.parse(localStorage.getItem(dateIdentifier)));
     loadElementsFromLocalStorage();
 }
 
@@ -393,7 +401,11 @@ const firstLoad = () => {
     // if (Array.isArray(zmienna)) {
     //     console.log(`to tablica`);
     // }
+
     loadElementsFromLocalStorage();
+
+    //ustawienie koloru komórki z dzisiejszą datą
+
 }
 firstLoad();
 
@@ -418,6 +430,7 @@ firstLoad();
 
 //metoda uruchamiana po kliknięciu na komórkę z datą
 window.onload = function () {
+    reloadAfterDataChange();
     document.getElementById('calendar-body').onclick = function (e) {
 
         var e = e || window.event;
@@ -447,18 +460,20 @@ var table = document.querySelector('#calendar-body')
 var selectedCells = table.getElementsByClassName('selected')
 
 table.addEventListener('click', function (e) {
-    var td = e.target
+        var td = e.target
 
-    if (td.tagName !== 'TD') {
-        return
+        if (td.tagName !== 'TD') {
+            return
+        }
+
+        if (selectedCells.length) {
+            selectedCells[0].className = ''
+        }
+
+        td.className = 'selected'
     }
 
-    if (selectedCells.length) {
-        selectedCells[0].className = ''
-    }
-
-    td.className = 'selected'
-})
+)
 
 
 
