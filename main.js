@@ -220,10 +220,10 @@ const loadElementsFromLocalStorage = () => {
             // create an item for each one
             var listItem = document.createElement('li');
 
-            // Add the item text
+            // Utworzenie elementu z przyciskami
             listItem.innerHTML = arrayWithTasks[i] + `<button class='deleteButton'>Delete</button><button class='editButton'>Edit</button>`;
 
-            // Add listItem to the listElement
+            // Dodanie elementu do listy
             listOfTask.appendChild(listItem);
 
             //szukamy w naszym konkretnym tasku przycisku
