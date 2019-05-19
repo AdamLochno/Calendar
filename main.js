@@ -83,19 +83,9 @@ function monthCalendar(month, year) {
                 let cell = document.createElement("td");
                 cell.setAttribute("class", "cell")
                 let cellText = document.createTextNode(date);
-                //stworzenie pola na zadania
-                let note = document.createElement("div");
 
-                note.setAttribute("class", "note");
-                //wrzucenie danych(cellText) do rodzica (cell)
                 cell.appendChild(cellText);
-                //wrzucenie obiektu(note) do rodzica (cell)
-                cell.appendChild(note);
-                //komórka note zawierać będzie teraz w sobie div + ul
-                note.innerHTML = "<div id='taskField'></div>" + "<ul id='listaZadan'></ul>";
-                //zdarzenie gdy następuje dwuklik
-                cell.addEventListener("dblclick", test);
-                //wrzucenie komórki(cell) do rodzica(row)
+
                 row.appendChild(cell);
                 date++;
             }
@@ -111,90 +101,23 @@ previous.addEventListener("click", previousMonth);
 chooseMonth.addEventListener("change", goTo);
 chooseYear.addEventListener("change", goTo);
 
-//const note = document.getElementById("task");
-
 //Metoda zmiany widoku
-function changeView() {
-    let chooseView = document.getElementById('view1').value;
-    console.log(chooseView);
-    if (chooseView == 1) {
-        //gdy widok WEEK
-    } else if (chooseView == 2) {
-        //gdy widok MONTH
-    } else if (chooseView == 3) {
-        //gdy widok YEAR
-    } else {
-        //gdy widok DAY
-    }
-}
+// function changeView() {
+//     let chooseView = document.getElementById('view1').value;
+//     console.log(chooseView);
+//     if (chooseView == 1) {
+//         //gdy widok WEEK
+//     } else if (chooseView == 2) {
+//         //gdy widok MONTH
+//     } else if (chooseView == 3) {
+//         //gdy widok YEAR
+//     } else {
+//         //gdy widok DAY
+//     }
+// }
 
 //wywołanie funkcji monthCalendar z danymi currentMonth i currentYear
 monthCalendar(currentMonth, currentYear);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Pobranie zadań z Local Storage
-const loadElementsFromLocalStorage = () => {
-    const listOfTask = document.getElementById('listOfTask');
-    listOfTask.textContent = "To do:"
-    //Pobranie elementu z Local Storage
-    let dateIdentifier = getChosenDateIdentifier();
-    let arrayWithTasks = JSON.parse(localStorage.getItem(dateIdentifier));
-    //console.log(arrayWithTasks);
-    if (arrayWithTasks == null) {
-        console.log(`brak zadań`);
-    } else {
-        var numberOfListItems = arrayWithTasks.length;
-
-        for (var i = 0; i < numberOfListItems; ++i) {
-            // create an item for each one
-            var listItem = document.createElement('li');
-
-            // Add the item text
-            listItem.innerHTML = arrayWithTasks[i];
-
-            // Add listItem to the listElement
-            listOfTask.appendChild(listItem);
-        }
-
-
-
-    }
-}
 
 //OBSŁUGA ZADAŃ
 var toDoList = [];
@@ -218,7 +141,6 @@ const getChosenDateIdentifier = () => {
     return JSON.stringify(dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask);
 }
 
-
 //usuwanie zadania
 const removeTask = (e) => {
     //bo chcemy usunąć element listy, który jest rodzicem przycisku
@@ -231,15 +153,11 @@ const removeTask = (e) => {
     taskNumber.textContent = listItems.length;
     renderList();
 
-
-
 }
-
-
 
 //edytowanie zadania
 const editTask = (e) => {
-    console.log(`działam`);
+    //console.log(`działam`);
     const taskName = e.target.parentNode.textContent;
     const newStr = taskName.slice(0, taskName.length - 10);
     //console.log(taskName);
@@ -264,41 +182,57 @@ const addTask = (e) => {
     const task = document.createElement('li');
     task.className = 'task';
     //task ma teraz wartość zadania do zrobienia oraz przycisków
-    task.innerHTML = titleTask + "<button class='deleteButton'>Delete</button>" + "<button class='editButton'>Edit</button>";
-
-    //dodanie taska do tablicy
-    // if (localStorage.getItem(dateIdentifier)) {
-    //     toDoList.push(titleTask);
-    //     console.log('hu');
-    // } else {
-    //     toDoList = [];
-    //     toDoList.push(titleTask);
-    // }
+    task.innerHTML = titleTask + `<button class='deleteButton'>Delete</button><button class='editButton'>Edit</button>`;
 
     toDoList.push(task);
     ListForLocalStorage.push(titleTask);
 
-
     //lista za każdym razem czyszczona i od nowa generowana
     renderList();
-
     //dodanie taska do listy na stronie
     listOfTask.appendChild(task);
     input.value = "";
     // const liItems = document.querySelectorAll('li.task').length;
     taskNumber.textContent = listItems.length;
 
-    task.querySelector('button').addEventListener('click', removeTask);
+    // task.querySelector('button').addEventListener('click', removeTask);
 
     //szukamy w naszym konkretnym tasku przycisku
     task.querySelector('.deleteButton').addEventListener('click', removeTask);
     //szukamy w naszym konkretnym tasku przycisku
     task.querySelector('.editButton').addEventListener('click', editTask);
-
 }
 
+//Pobranie zadań z Local Storage
+const loadElementsFromLocalStorage = () => {
+    const listOfTask = document.getElementById('listOfTask');
+    listOfTask.textContent = "To do:"
+    //Pobranie elementu z Local Storage
+    let dateIdentifier = getChosenDateIdentifier();
+    let arrayWithTasks = JSON.parse(localStorage.getItem(dateIdentifier));
+    //console.log(arrayWithTasks);
+    if (arrayWithTasks == null) {
+        console.log(`brak zadań`);
+    } else {
+        var numberOfListItems = arrayWithTasks.length;
 
+        for (var i = 0; i < numberOfListItems; ++i) {
+            // create an item for each one
+            var listItem = document.createElement('li');
 
+            // Add the item text
+            listItem.innerHTML = arrayWithTasks[i] + `<button class='deleteButton'>Delete</button><button class='editButton'>Edit</button>`;
+
+            // Add listItem to the listElement
+            listOfTask.appendChild(listItem);
+
+            //szukamy w naszym konkretnym tasku przycisku
+            listItem.querySelector('.deleteButton').addEventListener('click', removeTask);
+            //szukamy w naszym konkretnym tasku przycisku
+            listItem.querySelector('.editButton').addEventListener('click', editTask);
+        }
+    }
+}
 
 // Renderowanie nowej listy
 const renderList = () => {
@@ -311,14 +245,10 @@ const renderList = () => {
         listOfTask.appendChild(toDoElement);
     })
 
-
     //wysłanie do Local Storage
     //stworzenie obiektu do wysyłki do Local Storage
     let dateIdentifier = getChosenDateIdentifier();
     localStorage.setItem(dateIdentifier, JSON.stringify(ListForLocalStorage));
-
-
-
 
 }
 //odświeżanie listy po zmianie daty
@@ -339,49 +269,6 @@ const reloadAfterDataChange = () => {
 
 form.addEventListener('submit', addTask)
 
-
-
-// let example = {
-//     zadania: toDoList,
-
-//     date: dayOfDoingTask + '.' + monthOfDoingTask + '.' + yearOfDoingTask,
-// };
-// localStorage.setItem('date', JSON.stringify(example));
-// console.log(JSON.parse(localStorage.getItem('date')));
-// task.querySelector('button').addEventListener('click', removeTask);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //ustawienie kalendarza na dane przy pierwszym włączeniu
 const firstLoad = () => {
     // console.log(`Pierwsze załadowanie`);
@@ -397,36 +284,8 @@ const firstLoad = () => {
     document.getElementById('chooseMonth').value = today.getMonth();
     document.getElementById('chooseYear').value = today.getFullYear();
 
-
-    // if (Array.isArray(zmienna)) {
-    //     console.log(`to tablica`);
-    // }
-
-    loadElementsFromLocalStorage();
-
-    //ustawienie koloru komórki z dzisiejszą datą
-
 }
 firstLoad();
-
-
-
-// let Array = ["1", "2", "3"];
-// console.log(Array);
-// var numberOfListItems = Array.length;
-// for (var i = 0; i < numberOfListItems; ++i) {
-//     // create an item for each one
-//     var listItem = document.createElement('li');
-
-//     // Add the item text
-//     listItem.innerHTML = Array[i];
-
-//     // Add listItem to the listElement
-//     listOfTask.appendChild(listItem);
-// }
-
-
-
 
 //metoda uruchamiana po kliknięciu na komórkę z datą
 window.onload = function () {
@@ -475,46 +334,9 @@ table.addEventListener('click', function (e) {
 
 )
 
-
-
 goToToday = () => {
     // console.log(`dzisiaj`);
     currentMonth = today.getMonth();
     currentYear = today.getFullYear();
     monthCalendar(currentMonth, currentYear);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Zabawa z Local Storage
-// localStorage.setItem('date', '23.05.1994');
-// console.log(localStorage.getItem('date'));
-
-// let day = new Date();
-// let obiektProbny = {
-//     title: 'nowy',
-//     date: today.getDate(),
-//     zadania: [1, 2, 3, 4, 5],
-// };
-// localStorage.setItem('Proba', JSON.stringify(obiektProbny));
-// console.log(JSON.parse(localStorage.getItem('Proba')));
-// console.log(obiektProbny.zadania[0]);
-// console.log(obiektProbny.zadania.length);
-// let k = 0;
-// for (k = 0; k < obiektProbny.zadania.length; k++) {
-
-//     console.log(obiektProbny.zadania[k]);
-// }
