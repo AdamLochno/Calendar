@@ -169,25 +169,33 @@ monthCalendar(currentMonth, currentYear);
 
 
 
+//Pobranie zadań z Local Storage
+const loadElementsFromLocalStorage = () => {
+    //Pobranie elementu z Local Storage
+    let dateIdentifier = getChosenDateIdentifier();
+    let arrayWithTasks = JSON.parse(localStorage.getItem(dateIdentifier));
+    console.log(arrayWithTasks);
+    var numberOfListItems = arrayWithTasks.length;
+    for (var i = 0; i < numberOfListItems; ++i) {
+        // create an item for each one
+        var listItem = document.createElement('li');
 
+        // Add the item text
+        listItem.innerHTML = arrayWithTasks[i];
 
-
-
-
-
-
-
-
-
+        // Add listItem to the listElement
+        listOfTask.appendChild(listItem);
+    }
+}
 
 //OBSŁUGA ZADAŃ
 var toDoList = [];
 const form = document.getElementById('inputTask');
 const listOfTask = document.getElementById('listOfTask');
-const taskNumber = document.querySelector('h1 span');
+let taskNumber = document.querySelector('h1 span');
 const listItems = document.getElementsByClassName('task');
 const input = document.querySelector('input');
-const ListForLocalStorage = [];
+var ListForLocalStorage = [];
 
 //Pobranie daty
 const getChosenDateIdentifier = () => {
@@ -251,12 +259,16 @@ const addTask = (e) => {
     task.innerHTML = titleTask + "<button class='deleteButton'>Delete</button>" + "<button class='editButton'>Edit</button>";
 
     //dodanie taska do tablicy
-    if (localStorage.getItem(dateIdentifier)) {
-        console.log('działam');
-    }
+    // if (localStorage.getItem(dateIdentifier)) {
+    //     toDoList.push(titleTask);
+    //     console.log('hu');
+    // } else {
+    //     toDoList = [];
+    //     toDoList.push(titleTask);
+    // }
 
     toDoList.push(task);
-
+    ListForLocalStorage.push(titleTask);
 
 
     //lista za każdym razem czyszczona i od nowa generowana
@@ -283,9 +295,10 @@ const addTask = (e) => {
 // Renderowanie nowej listy
 const renderList = () => {
     listOfTask.textContent = "";
-    toDoList.forEach((toDoElement, key) => {
+    ListForLocalStorage.textContent = "";
+    toDoList.forEach((toDoElement, id) => {
         //wartość key będzie taka sama jak dataset.key(id)id elementu tablicy
-        toDoElement.dataset.key = key;
+        toDoElement.dataset.key = id;
         //dodajemy wszystkie elementy z tablicy do listOfTask
         listOfTask.appendChild(toDoElement);
     })
@@ -294,11 +307,28 @@ const renderList = () => {
     //wysłanie do Local Storage
     //stworzenie obiektu do wysyłki do Local Storage
     let dateIdentifier = getChosenDateIdentifier();
-    localStorage.setItem(dateIdentifier, JSON.stringify(toDoList));
-    console.log(JSON.parse(localStorage.getItem(dateIdentifier)));
+    localStorage.setItem(dateIdentifier, JSON.stringify(ListForLocalStorage));
+
+
 
 
 }
+//odświeżanie listy po zmianie daty
+const reloadAfterDataChange = () => {
+    //wyczyszczenie listy
+    listOfTask.textContent = "";
+    toDoList = [];
+    taskNumber.textContent = listItems.length;
+    //pobranie listy z Local Storage
+    ListForLocalStorage.textContent = "";
+    ListForLocalStorage = [];
+
+    //Pobranie elementu z Local Storage
+    let dateIdentifier = getChosenDateIdentifier();
+    console.log(JSON.parse(localStorage.getItem(dateIdentifier)));
+    loadElementsFromLocalStorage();
+}
+
 form.addEventListener('submit', addTask)
 
 
@@ -360,10 +390,28 @@ const firstLoad = () => {
     document.getElementById('chooseYear').value = today.getFullYear();
 
 
-
+    // if (Array.isArray(zmienna)) {
+    //     console.log(`to tablica`);
+    // }
+    loadElementsFromLocalStorage();
 }
 firstLoad();
 
+
+
+// let Array = ["1", "2", "3"];
+// console.log(Array);
+// var numberOfListItems = Array.length;
+// for (var i = 0; i < numberOfListItems; ++i) {
+//     // create an item for each one
+//     var listItem = document.createElement('li');
+
+//     // Add the item text
+//     listItem.innerHTML = Array[i];
+
+//     // Add listItem to the listElement
+//     listOfTask.appendChild(listItem);
+// }
 
 
 
