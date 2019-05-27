@@ -194,7 +194,7 @@ const getChosenDateIdentifier = () => {
 //Dodawanie zadań
 const addTask = (e) => {
     e.preventDefault();
-
+    console.log(toDoList.length);
     const titleTask = input.value;
     //console.log(titleTask);
     //jak będzie pusty formularz to zakonczy działanie funkcji
@@ -265,12 +265,14 @@ const renderList = () => {
     localStorage.setItem(dateIdentifier, JSON.stringify(arrayWithTasks));
 }
 
+
 //Załadowanie zadań z Local Storage
 const loadElementsFromLocalStorage = () => {
     listOfTask.textContent = "";
+
     let dateIdentifier = getChosenDateIdentifier();
     let arrayFromLocalStorage = JSON.parse(localStorage.getItem(dateIdentifier));
-    // console.log(arrayFromLocalStorage);
+    console.log(arrayFromLocalStorage);
     //return arrayFromLocalStorage;
     //dodanie zadań z arrayFromLocalStorage do tablicy
     if (arrayFromLocalStorage == null) {
@@ -283,10 +285,12 @@ const loadElementsFromLocalStorage = () => {
             // Dodanie elementu do listy
             listOfTask.appendChild(task);
 
-            task.querySelector('.deleteButton').addEventListener('click', removeTask);
             //szukamy w naszym konkretnym tasku przycisku
+            task.querySelector('button').addEventListener('click', removeTask);
             task.querySelector('.editButton').addEventListener('click', editTask);
             taskNumber.textContent = arrayFromLocalStorage.length
+            toDoList.push(task);
+
         }
     }
 
