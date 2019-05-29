@@ -272,7 +272,7 @@ const loadElementsFromLocalStorage = () => {
 
     let dateIdentifier = getChosenDateIdentifier();
     let arrayFromLocalStorage = JSON.parse(localStorage.getItem(dateIdentifier));
-    console.log(arrayFromLocalStorage);
+    // console.log(arrayFromLocalStorage);
     //return arrayFromLocalStorage;
     //dodanie zadań z arrayFromLocalStorage do tablicy
     if (arrayFromLocalStorage == null) {
@@ -290,15 +290,24 @@ const loadElementsFromLocalStorage = () => {
             task.querySelector('.editButton').addEventListener('click', editTask);
             taskNumber.textContent = arrayFromLocalStorage.length
             toDoList.push(task);
+            // console.log(arrayFromLocalStorage[i]);
+            arrayWithTasks[i] = arrayFromLocalStorage[i];
 
         }
     }
 
 
 }
+//odświeżanie listy po zmianie daty
 
-
-
+const reloadAfterDataChange = () => {
+    listOfTask.textContent = "";
+    toDoList = [];
+    taskNumber.textContent = listItems.length;
+    arrayWithTasks = [];
+    console.log(`działam123`);
+    loadElementsFromLocalStorage();
+}
 
 
 
@@ -366,6 +375,7 @@ window.onload = function () {
             const taskOfYear = document.getElementById('taskYear');
             taskOfYear.value = currentYear;
             console.log(taskDay.value + "." + taskMonth.value + "." + taskYear.value);
+            reloadAfterDataChange();
         }
     };
 
