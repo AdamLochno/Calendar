@@ -29,7 +29,7 @@ function goTo() {
 //Funkcja pójścia do następnego miesiąca
 function nextMonth() {
     currentYear = (currentMonth === 11) ? currentYear + 1 : currentYear;
-    currentMonth = (currentMonth + 1) % 12;
+    currentMonth = (currentMonth+1) % 12;
     monthCalendar(currentMonth, currentYear);
 }
 //Funkcja pójścia do poprzedniego miesiąca
@@ -48,7 +48,7 @@ function monthCalendar(month, year) {
     //sprawdzenie jaki dzień miesiąca jest pierwszy
     let firstDay = (new Date(year, month)).getDay();
     //sprawdzenie liczby dni w miesiącu
-    let daysInMonth = new Date(year, month, 0).getDate();
+    let daysInMonth = new Date(year, month+1, 0).getDate();
 
     // wyczyszczenie tablicy
     tbl.innerHTML = "";
@@ -118,52 +118,6 @@ chooseYear.addEventListener("change", goTo);
 
 //wywołanie funkcji monthCalendar z danymi currentMonth i currentYear
 monthCalendar(currentMonth, currentYear);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -308,29 +262,6 @@ const reloadAfterDataChange = () => {
     console.log(`działam123`);
     loadElementsFromLocalStorage();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
